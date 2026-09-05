@@ -1,14 +1,14 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBjdFx-myXUXM3jM4vDOVyP-OUEECkx7V4",
+  apiKey: "AIzaSyBjdFx-myXUXM3jM4vDOVyP-QUEEckx7V4",
   authDomain: "colab-85246.firebaseapp.com",
   projectId: "colab-85246",
   storageBucket: "colab-85246.firebasestorage.app",
   messagingSenderId: "140125081566",
   appId: "1:140125081566:web:5a33c2ea07a61d0d9fd74f"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
 const roleNames = { 
     student: 'Ученик', 
     scientist: 'Ученый', 
