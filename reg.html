@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoLab - Авторизация</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body id="authView">
+    <div class="authLayout">
+        <aside class="authAside">
+            <a href="#" class="brand">
+                <img src="logo.png" alt="Logo" class="brandLogo">
+                CoLab
+            </a>
+            <div class="asideCopy">
+                <p class="eyebrow"><span class="signalDot"></span>Платформа идей</p>
+                <h1>Объединяем науки и решения.</h1>
+                <p>Платформа для совместной работы учеников, ученых и организаций.</p>
+            </div>
+            <div class="asideFoot">© CoLab 2026</div>
+        </aside>
+        <main class="authPanel">
+            <div class="authCard">
+                <div class="authTabs">
+                    <button class="authTab active" data-auth="login">Вход</button>
+                    <button class="authTab" data-auth="register">Регистрация</button>
+                </div>
+                <div id="loginForm" class="authForm">
+                    <h2>С возвращением</h2>
+                    <p class="formNote">Введите свои данные для входа</p>
+                    <label>Никнейм
+                        <input type="text" id="loginNick" placeholder="Ваш никнейм">
+                    </label>
+                    <label>Пароль
+                        <div class="passwordWrap">
+                            <input type="password" id="loginPassword" placeholder="Пароль">
+                            <button type="button" class="passwordToggle" data-target="loginPassword">Показать</button>
+                        </div>
+                    </label>
+                    <div id="loginMessage" class="message"></div>
+                    <button id="loginButton" class="primaryButton">Войти →</button>
+                </div>
+                <div id="registerForm" class="authForm hidden">
+                    <h2>Создать аккаунт</h2>
+                    <p class="formNote">Заполните поля для регистрации</p>
+                    <label>Никнейм
+                        <input type="text" id="registerNick" placeholder="Придумайте никнейм">
+                    </label>
+                    <label>Роль
+                        <select id="registerRole">
+                            <option value="student">Ученик</option>
+                            <option value="scientist">Ученый</option>
+                            <option value="company">Компания</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </label>
+                    <label>Пароль
+                        <div class="passwordWrap">
+                            <input type="password" id="registerPassword" placeholder="Минимум 6 символов">
+                            <button type="button" class="passwordToggle" data-target="registerPassword">Показать</button>
+                        </div>
+                    </label>
+                    <div id="registerMessage" class="message"></div>
+                    <button id="registerButton" class="primaryButton">Зарегистрироваться →</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
