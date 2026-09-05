@@ -1,33 +1,13 @@
-const storageKeys = { 
-    users: 'colab_users', 
-    posts: 'colab_posts', 
-    current: 'colab_current' 
+const firebaseConfig = {
+  apiKey: "AIzaSyBjdFx-myXUXM3jM4vDOVyP-OUEECkx7V4",
+  authDomain: "colab-85246.firebaseapp.com",
+  projectId: "colab-85246",
+  storageBucket: "colab-85246.firebasestorage.app",
+  messagingSenderId: "140125081566",
+  appId: "1:140125081566:web:5a33c2ea07a61d0d9fd74f"
 };
-
-const seedPosts = [
-    { 
-        id: 'p1', 
-        title: 'Очистка воды в поселениях', 
-        description: 'Нужен доступный способ контроля качества воды.', 
-        tag: 'экология', 
-        author: 'Aqua Research', 
-        email: 'aqua@test.com', 
-        role: 'scientist' 
-    },
-    { 
-        id: 'p2', 
-        title: 'Умное распределение энергии', 
-        description: 'Как уменьшить потери солнечной энергии?', 
-        tag: 'энергетика', 
-        author: 'EcoTech', 
-        email: 'eco@test.com', 
-        role: 'company' 
-    }
-];
-
-const get = key => JSON.parse(localStorage.getItem(key) || 'null');
-const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-const $ = selector => document.querySelector(selector);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 const roleNames = { 
     student: 'Ученик', 
@@ -36,12 +16,16 @@ const roleNames = {
     other: 'Другое' 
 };
 
-let posts = get(storageKeys.posts) || seedPosts;
-let currentUser = get(storageKeys.current);
+const $ = selector => document.querySelector(selector);
+const getCurrentUser = () => JSON.parse(localStorage.getItem('colab_current'));
+const setCurrentUser = (user) => localStorage.setItem('colab_current', JSON.stringify(user));
+
+let currentUser = getCurrentUser();
 
 const isAuthPage = !!$('#authView');
 const isAppPage = !!$('#appView');
 
+// --- ЛОГИКА АВТОРИЗАЦИИ И РЕГИСТРАЦИИ ---
 if (isAuthPage) {
     if (currentUser) {
         window.location.href = 'index.html';
@@ -57,9 +41,8 @@ if (isAuthPage) {
 
     document.addEventListener('click', e => {
         const authBtn = e.target.closest('[data-auth]');
-        if (authBtn) {
-            showAuth(authBtn.dataset.auth);
-        }
+        if (authBtn) showAuth(authBtn.dataset.auth);
+        
         if (e.target.matches('.passwordToggle')) {
             const input = $(`#${e.target.dataset.target}`);
             input.type = input.type === 'password' ? 'text' : 'password';
@@ -67,65 +50,89 @@ if (isAuthPage) {
         }
     });
 
-    $('#registerButton')?.addEventListener('click', () => {
+    // Регистрация с проверкой уникальности никнейма в базе
+    $('#registerButton')?.addEventListener('click', async () => {
         const nick = $('#registerNick').value.trim();
         const password = $('#registerPassword').value;
-        const users = get(storageKeys.users) || [];
-        
+        const role = $('#registerRole').value;
+        const msg = $('#registerMessage');
+
         if (nick.length < 3 || password.length < 6) {
-            $('#registerMessage').textContent = 'Заполните поля корректно (пароль от 6 символов).';
+            msg.textContent = 'Ник от 3 символов, пароль от 6 символов.';
             return;
         }
 
-        const user = { 
-            nick, 
-            password, 
-            role: $('#registerRole').value 
-        };
-        
-        users.push(user);
-        save(storageKeys.users, users);
-        save(storageKeys.current, user);
-        window.location.href = 'index.html';
+        msg.textContent = 'Проверка никнейма...';
+
+        try {
+            // Проверяем наличие ника в базе данных
+            const userDoc = await db.collection('users').doc(nick.toLowerCase()).get();
+            if (userDoc.exists) {
+                msg.textContent = 'Этот никнейм уже занят. Выберите другой!';
+                return;
+            }
+
+            const newUser = { nick, password, role };
+            
+            // Сохраняем нового пользователя в облако
+            await db.collection('users').doc(nick.toLowerCase()).set(newUser);
+            
+            setCurrentUser(newUser);
+            window.location.href = 'index.html';
+        } catch (err) {
+            msg.textContent = 'Ошибка при регистрации: ' + err.message;
+        }
     });
 
-    $('#loginButton')?.addEventListener('click', () => {
+    // Вход
+    $('#loginButton')?.addEventListener('click', async () => {
         const nick = $('#loginNick').value.trim();
         const password = $('#loginPassword').value;
-        const users = get(storageKeys.users) || [];
-        
-        const user = users.find(u => u.nick === nick && u.password === password);
-        if (!user) {
-            $('#loginMessage').textContent = 'Неверный логин или пароль.';
+        const msg = $('#loginMessage');
+
+        if (!nick || !password) {
+            msg.textContent = 'Заполните все поля.';
             return;
         }
 
-        save(storageKeys.current, user);
-        window.location.href = 'index.html';
+        msg.textContent = 'Вход...';
+
+        try {
+            const userDoc = await db.collection('users').doc(nick.toLowerCase()).get();
+            if (!userDoc.exists || userDoc.data().password !== password) {
+                msg.textContent = 'Неверный никнейм или пароль.';
+                return;
+            }
+
+            setCurrentUser(userDoc.data());
+            window.location.href = 'index.html';
+        } catch (err) {
+            msg.textContent = 'Ошибка входа: ' + err.message;
+        }
     });
 }
 
+// --- ЛОГИКА ПРИЛОЖЕНИЯ ---
 if (isAppPage) {
     if (!currentUser) {
         window.location.href = 'reg.html';
     } else {
         $('#headerNick').textContent = currentUser.nick;
         $('#headerAvatar').textContent = currentUser.nick.charAt(0).toUpperCase();
-        renderPosts();
-        renderProfile();
+        
+        // Синхронизация задач в реальном времени со всеми устройствами
+        db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+            const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderPosts(posts);
+            renderProfile(posts);
+        });
     }
 
-    function deletePost(id) {
-        posts = posts.filter(p => p.id !== id);
-        save(storageKeys.posts, posts);
-        renderPosts();
-        renderProfile();
-    }
-
-    function renderPosts() {
+    // Отрисовка постов
+    function renderPosts(posts) {
         const query = $('#searchInput').value.toLowerCase();
         const activeFilter = document.querySelector('.filter.active')?.dataset.filter || 'all';
-        
+
         const visible = posts.filter(p => {
             const matchFilter = activeFilter === 'all' || p.role === activeFilter;
             const matchSearch = `${p.title} ${p.description} ${p.tag}`.toLowerCase().includes(query);
@@ -133,12 +140,12 @@ if (isAppPage) {
         });
 
         if (!visible.length) {
-            $('#postsList').innerHTML = '<div class="empty">Задач не найдено.</div>';
+            $('#postsList').innerHTML = '<div class="empty">Задач пока нет.</div>';
             return;
         }
 
         $('#postsList').innerHTML = visible.map(p => {
-            const isOwner = currentUser && p.author === currentUser.nick;
+            const isOwner = currentUser && p.author.toLowerCase() === currentUser.nick.toLowerCase();
             return `
                 <article class="postCard">
                     <div class="postMeta">
@@ -159,12 +166,14 @@ if (isAppPage) {
         }).join('');
     }
 
-    function renderProfile() {
-        const mine = posts.filter(p => p.author === currentUser.nick);
+    // Отрисовка профиля
+    function renderProfile(posts) {
+        const mine = posts.filter(p => p.author.toLowerCase() === currentUser.nick.toLowerCase());
         $('#profileNick').textContent = currentUser.nick;
         $('#profileRole').textContent = roleNames[currentUser.role] || 'Участник';
         $('#profileAvatar').textContent = currentUser.nick.charAt(0).toUpperCase();
         $('#profileProblems').textContent = mine.length;
+        
         $('#myPosts').innerHTML = mine.length 
             ? mine.map(p => `
                 <div class="profileItem">
@@ -175,28 +184,27 @@ if (isAppPage) {
             : '<p>Вы еще не опубликовали задач.</p>';
     }
 
-    document.addEventListener('click', e => {
+    // Слушатель кликов
+    document.addEventListener('click', async e => {
         const deleteBtn = e.target.closest('[data-delete]');
         if (deleteBtn) {
-            deletePost(deleteBtn.dataset.delete);
+            const postId = deleteBtn.dataset.delete;
+            if (confirm('Точно удалить эту задачу?')) {
+                await db.collection('posts').doc(postId).delete();
+            }
             return;
         }
 
         const pageBtn = e.target.closest('[data-page]');
         if (pageBtn) {
-            document.querySelectorAll('.navButton').forEach(b => {
-                b.classList.toggle('active', b === pageBtn);
-            });
+            document.querySelectorAll('.navButton').forEach(b => b.classList.toggle('active', b === pageBtn));
             $('#postsPage').classList.toggle('hidden', pageBtn.dataset.page !== 'posts');
             $('#profilePage').classList.toggle('hidden', pageBtn.dataset.page !== 'profile');
         }
 
         const filterBtn = e.target.closest('[data-filter]');
         if (filterBtn) {
-            document.querySelectorAll('.filter').forEach(b => {
-                b.classList.toggle('active', b === filterBtn);
-            });
-            renderPosts();
+            document.querySelectorAll('.filter').forEach(b => b.classList.toggle('active', b === filterBtn));
         }
 
         const closeBtn = e.target.closest('[data-close]');
@@ -206,41 +214,40 @@ if (isAppPage) {
     });
 
     $('#logoutButton')?.addEventListener('click', () => {
-        localStorage.removeItem(storageKeys.current);
+        localStorage.removeItem('colab_current');
         window.location.href = 'reg.html';
     });
 
-    $('#searchInput')?.addEventListener('input', renderPosts);
     $('#newPostButton')?.addEventListener('click', () => {
         $('#postModal').classList.remove('hidden');
     });
 
-    $('#savePostButton')?.addEventListener('click', () => {
+    // Отправка новой задачи в облако
+    $('#savePostButton')?.addEventListener('click', async () => {
         const title = $('#postTitle').value.trim();
         const description = $('#postDescription').value.trim();
         const email = $('#postEmail').value.trim();
         const tag = $('#postTag').value.trim() || 'общие';
+
         if (!title || !description || !email) {
             $('#postMessage').textContent = 'Заполните заголовок, описание и почту.';
             return;
         }
-        posts.unshift({ 
-            id: `p${Date.now()}`, 
-            title, 
-            description, 
-            email, 
-            tag, 
-            author: currentUser.nick, 
-            role: currentUser.role 
+
+        await db.collection('posts').add({
+            title,
+            description,
+            email,
+            tag,
+            author: currentUser.nick,
+            role: currentUser.role,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        save(storageKeys.posts, posts);
+
         $('#postModal').classList.add('hidden');
         $('#postTitle').value = '';
         $('#postDescription').value = '';
         $('#postEmail').value = '';
         $('#postTag').value = '';
-        
-        renderPosts();
-        renderProfile();
     });
 }
