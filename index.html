@@ -1,189 +1,89 @@
 <!DOCTYPE html>
-
 <html lang="ru">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>CoLab - Платформа</title>
-
+    <title>CoLab</title>
     <link rel="stylesheet" href="main.css">
-
 </head>
-
 <body id="appView">
-
     <header class="appHeader">
-
         <a href="#" class="brand">
-
-            <img src="logo.png" alt="Logo" class="brandLogo">
-
-            CoLab
-
-        </a>
-
+            <img src="" alt="Logo" class="brandLogo">
+            CoLab </a>
         <nav>
-
             <button class="navButton active" data-page="posts">Задачи</button>
-
             <button class="navButton" data-page="profile">Профиль</button>
-
         </nav>
-
         <div class="headerUser">
-
             <div id="headerAvatar" class="avatar">U</div>
-
             <span id="headerNick">Пользователь</span>
-
             <button id="logoutButton" class="logoutButton" title="Выйти">↗</button>
-
         </div>
-
     </header>
-
-
-
     <main class="appMain">
-
         <section id="postsPage" class="page">
-
             <div class="pageHeading">
-
                 <h1>Актуальные<br><em>проблемы</em></h1>
-
                 <button id="newPostButton" class="primaryButton compact">+ Опубликовать задачу</button>
-
             </div>
-
             <div class="toolbar">
-
                 <div class="searchBox">
-
-                    🔍 <input type="text" id="searchInput" placeholder="Поиск задач...">
-
+                    <input type="text" id="searchInput" placeholder="Поиск задач...">
                 </div>
-
                 <div class="filters">
-
                     <button class="filter active" data-filter="all">Все</button>
-
                     <button class="filter" data-filter="student">Ученики</button>
-
                     <button class="filter" data-filter="scientist">Ученые</button>
-
                     <button class="filter" data-filter="company">Компании</button>
-
                     <button class="filter" data-filter="other">Другое</button>
-
                 </div>
-
             </div>
-
             <div id="postsList" class="postsList"></div>
-
         </section>
-
-
-
         <section id="profilePage" class="page hidden">
-
             <div class="profileHero">
-
                 <div id="profileAvatar" class="profileAvatar">U</div>
-
                 <div>
-
                     <h2 id="profileNick">Пользователь</h2>
-
                     <div id="profileRole" class="profileRole">Участник</div>
-
                 </div>
-
             </div>
-
             <div class="profileStats">
-
                 <div>
-
                     <strong id="profileProblems">0</strong>
-
                     <span>Опубликовано задач</span>
-
                 </div>
-
             </div>
-
             <div class="profileColumns">
-
                 <div>
-
                     <h3>Мои задачи</h3>
-
                     <div id="myPosts" class="profileItems"></div>
-
                 </div>
-
             </div>
-
         </section>
-
     </main>
-
-
-
     <div id="postModal" class="modal hidden">
-
         <div class="modalCard">
-
             <button class="closeButton" data-close="postModal">×</button>
-
             <h2>Новая задача</h2>
-
             <label>Заголовок
-
                 <input type="text" id="postTitle" placeholder="Краткое название">
-
             </label>
-
             <label>Описание
-
                 <textarea id="postDescription" rows="4" placeholder="Подробное описание проблемы..."></textarea>
-
             </label>
-
             <label>Ваша почта (для связи)
-
                 <input type="email" id="postEmail" placeholder="example@mail.com">
-
             </label>
-
-            <label>Тег
-
-                <input type="text" id="postTag" placeholder="экология, IT и т.д.">
-
+            <label>Тег<input type="text" id="postTag" placeholder="экология, IT и т.д.">
             </label>
-
             <div id="postMessage" class="message"></div>
-
             <button id="savePostButton" class="primaryButton">Опубликовать</button>
-
         </div>
-
     </div>
-
-
-
-   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
 <script src="main.js"></script>
-
 </body>
-
 </html>
