@@ -24,7 +24,6 @@ let currentUser = JSON.parse(localStorage.getItem('colab_user')) || null;
 let allPosts = [];
 
 const isAuthPage = window.location.pathname.endsWith('reg.html');
-const isAppPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/collab/');
 
 if (!currentUser && !isAuthPage) {
     window.location.href = 'reg.html';
@@ -195,12 +194,12 @@ function renderProfile(posts) {
         if (profileNick) profileNick.textContent = currentUser.nick;
         if (profileRole) profileRole.textContent = roleNames[currentUser.role] || 'Участник';
 
-        const myPosts = posts.filter(p => p.author.toLowerCase() === currentUser.nick.toLowerCase());
+        const myPosts = posts.filter(p => p.author && p.author.toLowerCase() === currentUser.nick.toLowerCase());
         if (profileProblems) profileProblems.textContent = myPosts.length;
     }
 }
 
-if (isAppPage) {
+if (!isAuthPage) {
     db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
         allPosts = snapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data()));
         renderPosts(allPosts);
@@ -279,12 +278,15 @@ document.addEventListener('click', async (e) => {
         navBtn.classList.add('active');
 
         const page = navBtn.dataset.page;
+        const postsPage = getEl('#postsPage');
+        const profilePage = getEl('#profilePage');
+
         if (page === 'posts') {
-            getEl('#postsPage').classList.remove('hidden');
-            getEl('#profilePage').classList.add('hidden');
+            if (postsPage) postsPage.classList.remove('hidden');
+            if (profilePage) profilePage.classList.add('hidden');
         } else if (page === 'profile') {
-            getEl('#postsPage').classList.add('hidden');
-            getEl('#profilePage').classList.remove('hidden');
+            if (postsPage) postsPage.classList.add('hidden');
+            if (profilePage) profilePage.classList.remove('hidden');
         }
         return;
     }
