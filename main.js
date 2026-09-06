@@ -39,7 +39,6 @@ if (isAuthPage) {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
 
-    // Переключение между вкладками Вход / Регистрация
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
@@ -56,7 +55,6 @@ if (isAuthPage) {
         });
     });
 
-    // Показать / Скрыть пароль
     document.querySelectorAll('.passwordToggle').forEach(btn => {
         btn.addEventListener('click', () => {
             const inputId = btn.dataset.target;
@@ -71,7 +69,6 @@ if (isAuthPage) {
         });
     });
 
-    // Обработка клика по кнопке "Войти"
     const loginBtn = document.getElementById('loginButton');
     if (loginBtn) {
         loginBtn.addEventListener('click', async (e) => {
@@ -101,7 +98,6 @@ if (isAuthPage) {
         });
     }
 
-    // Обработка клика по кнопке "Зарегистрироваться"
     const regBtn = document.getElementById('registerButton');
     if (regBtn) {
         regBtn.addEventListener('click', async (e) => {
@@ -142,7 +138,7 @@ if (isAuthPage) {
     }
 }
 
-/* === ГЛАВНАЯ СТРАНИЦА И ЗАДАЧИ === */
+/* === ОТРЕСОВКА И ОТОБРАЖЕНИЕ ПОСТОВ === */
 function renderPosts(posts) {
     const postsList = getEl('#postsList');
     if (!postsList) return;
@@ -213,6 +209,7 @@ function renderProfile(posts) {
     }
 }
 
+/* === УПРАВЛЕНИЕ МОДАЛЬНЫМ ОКНОМ И СОЗДАНИЕ ПОСТОВ === */
 if (isAppPage) {
     db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
         allPosts = snapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data()));
@@ -221,10 +218,66 @@ if (isAppPage) {
     }, error => {
         console.error("Ошибка загрузки постов:", error);
     });
+
+    const modal = getEl('#postModal');
+    const openBtn = getEl('#openModalBtn');
+    const closeBtn = getEl('#closeModalBtn');
+    const createForm = getEl('#createPostForm');
+
+    // Открыть модальное окно
+    if (openBtn && modal) {
+        openBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+    }
+
+    // Закрыть модальное окно на крестик
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+    }
+
+    // Закрыть при клике вне окна
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+
+    // Отправка новой формы
+    if (createForm) {
+        createForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = getEl('#postTitle').value.trim();
+            const description = getEl('#postDesc').value.trim();
+            const tag = getEl('#postTag').value.trim();
+            const email = getEl('#postEmail').value.trim();
+
+            if (!title || !description) return;
+
+            try {
+                await db.collection('posts').add({
+                    title: title,
+                    description: description,
+                    tag: tag,
+                    email: email,
+                    author: currentUser.nick,
+                    role: currentUser.role,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                createForm.reset();
+                modal.classList.add('hidden');
+            } catch (err) {
+                alert('Ошибка при публикации задачи!');
+            }
+        });
+    }
 }
 
 document.addEventListener('click', async (e) => {
-    // Навигация по фильтрам
     const filterBtn = e.target.closest('[data-filter]');
     if (filterBtn) {
         document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
@@ -233,14 +286,12 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Выход из системы
     if (e.target.id === 'logoutButton') {
         localStorage.removeItem('colab_user');
         window.location.href = 'reg.html';
         return;
     }
 
-    // Удаление поста
     const deleteId = e.target.dataset.delete;
     if (deleteId) {
         if (confirm('Удалить эту задачу?')) {
@@ -253,7 +304,6 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-// Поиск
 const searchEl = getEl('#searchInput');
 if (searchEl) {
     searchEl.addEventListener('input', () => renderPosts(allPosts));
