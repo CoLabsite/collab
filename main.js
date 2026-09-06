@@ -178,38 +178,49 @@ if (formEl) {
 }
 
 if (isAuthPage) {
-    const authForm = getEl('#authForm');
-    const authTitle = getEl('#authTitle');
-    const submitBtn = getEl('#submitBtn');
-    const toggleAuth = getEl('#toggleAuth');
-    const roleGroup = getEl('#roleGroup');
-    const authError = getEl('#authError');
-    let isReg = true;
+    const authForm = document.getElementById('authForm');
+    const authTitle = document.getElementById('authTitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const roleGroup = document.getElementById('roleGroup');
+    const authError = document.getElementById('authError');
+    let isReg = false;
 
     if (toggleAuth) {
-        toggleAuth.addEventListener('click', (e) => {
+        toggleAuth.addEventListener('click', function(e) {
             e.preventDefault();
             isReg = !isReg;
-            authTitle.textContent = isReg ? 'Создать аккаунт' : 'Вход в аккаунт';
-            submitBtn.textContent = isReg ? 'Зарегистрироваться →' : 'Войти →';
-            toggleAuth.textContent = isReg ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
-            roleGroup.style.display = isReg ? 'block' : 'none';
-            authError.textContent = '';
+            
+            if (isReg) {
+                authTitle.textContent = 'Создать аккаунт';
+                submitBtn.textContent = 'Зарегистрироваться →';
+                toggleAuth.textContent = 'Уже есть аккаунт? Войти';
+                if (roleGroup) roleGroup.style.display = 'block';
+            } else {
+                authTitle.textContent = 'Вход в аккаунт';
+                submitBtn.textContent = 'Войти →';
+                toggleAuth.textContent = 'Нет аккаунта? Зарегистрироваться';
+                if (roleGroup) roleGroup.style.display = 'none';
+            }
+            if (authError) authError.textContent = '';
         });
     }
 
     if (authForm) {
-        authForm.addEventListener('submit', async (e) => {
+        authForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            authError.textContent = '';
+            if (authError) authError.textContent = '';
             
-            const nick = getEl('#nick').value.trim();
-            const password = getEl('#password').value.trim();
-            const roleSelect = getEl('#role');
+            const nickInput = document.getElementById('nick');
+            const passInput = document.getElementById('password');
+            const roleSelect = document.getElementById('role');
+
+            const nick = nickInput ? nickInput.value.trim() : '';
+            const password = passInput ? passInput.value.trim() : '';
             const role = roleSelect ? roleSelect.value : 'student';
 
             if (!nick || !password) {
-                authError.textContent = 'Заполните все поля!';
+                if (authError) authError.textContent = 'Заполните все поля!';
                 return;
             }
 
@@ -219,7 +230,7 @@ if (isAuthPage) {
                 if (isReg) {
                     const doc = await userDocRef.get();
                     if (doc.exists) {
-                        authError.textContent = 'Этот никнейм уже занят!';
+                        if (authError) authError.textContent = 'Этот никнейм уже занят!';
                         return;
                     }
 
@@ -230,7 +241,7 @@ if (isAuthPage) {
                 } else {
                     const doc = await userDocRef.get();
                     if (!doc.exists || doc.data().password !== password) {
-                        authError.textContent = 'Неверный никнейм или пароль!';
+                        if (authError) authError.textContent = 'Неверный никнейм или пароль!';
                         return;
                     }
 
@@ -238,7 +249,7 @@ if (isAuthPage) {
                     window.location.href = 'index.html';
                 }
             } catch (err) {
-                authError.textContent = 'Ошибка сети или базы данных.';
+                if (authError) authError.textContent = 'Ошибка сети или базы данных.';
             }
         });
     }
