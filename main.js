@@ -193,9 +193,6 @@ function renderProfile(posts) {
         if (headerNick) headerNick.textContent = currentUser.nick;
         if (profileNick) profileNick.textContent = currentUser.nick;
         if (profileRole) profileRole.textContent = roleNames[currentUser.role] || 'Участник';
-
-        const myPosts = posts.filter(p => p.author && p.author.toLowerCase() === currentUser.nick.toLowerCase());
-        if (profileProblems) profileProblems.textContent = myPosts.length;
     }
 }
 
