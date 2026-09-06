@@ -157,7 +157,7 @@ function renderPosts(posts) {
     let html = '';
     for (let i = 0; i < visible.length; i++) {
         const p = visible[i];
-        const isOwner = currentUser && p.author.toLowerCase() === currentUser.nick.toLowerCase();
+        const isOwner = currentUser && p.author && p.author.toLowerCase() === currentUser.nick.toLowerCase();
 
         let deleteBtnHtml = isOwner ? '<button class="deleteButton" data-delete="' + p.id + '">Удалить</button>' : '';
         let emailHtml = p.email ? '<a href="mailto:' + p.email + '" class="postContact">✉ ' + p.email + '</a>' : '';
@@ -193,8 +193,9 @@ function renderProfile(posts) {
         if (headerNick) headerNick.textContent = currentUser.nick;
         if (profileNick) profileNick.textContent = currentUser.nick;
         if (profileRole) profileRole.textContent = roleNames[currentUser.role] || 'Участник';
-        const myPosts posts.filter(p => p.author && p.author.toLowerCase() === current User.nick.toLowerCase());
-        if (profileProblems) profileProblems.text Content myPosts.length;
+
+        const myPosts = posts.filter(p => p.author && p.author.toLowerCase() === currentUser.nick.toLowerCase());
+        if (profileProblems) profileProblems.textContent = myPosts.length;
     }
 }
 
