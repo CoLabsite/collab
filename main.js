@@ -1,10 +1,10 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBjdFx-myXUXM3jM4vDOVyP-QUEEckx7V4",
-  authDomain: "colab-85246.firebaseapp.com",
-  projectId: "colab-85246",
-  storageBucket: "colab-85246.firebasestorage.app",
-  messagingSenderId: "140125081566",
-  appId: "1:140125081566:web:5a33c2ea07a61d0d9fd74f"
+    apiKey: "AIzaSyBjdFx-myXUXM3jM4vDOVyP-QUEEckx7V4",
+    authDomain: "colab-85246.firebaseapp.com",
+    projectId: "colab-85246",
+    storageBucket: "colab-85246.firebasestorage.app",
+    messagingSenderId: "140125081566",
+    appId: "1:140125081566:web:5a33c2ea07a61d0d9fd74f"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -33,6 +33,116 @@ if (!currentUser && !isAuthPage) {
     window.location.href = 'index.html';
 }
 
+/* === АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ === */
+if (isAuthPage) {
+    const tabs = document.querySelectorAll('.authTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    // Переключение между вкладками Вход / Регистрация
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const target = tab.dataset.auth;
+            if (target === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+            }
+        });
+    });
+
+    // Показать / Скрыть пароль
+    document.querySelectorAll('.passwordToggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const inputId = btn.dataset.target;
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = 'Скрыть';
+            } else {
+                input.type = 'password';
+                btn.textContent = 'Показать';
+            }
+        });
+    });
+
+    // Обработка клика по кнопке "Войти"
+    const loginBtn = document.getElementById('loginButton');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const nick = document.getElementById('loginNick').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const msg = document.getElementById('loginMessage');
+            msg.textContent = '';
+
+            if (!nick || !password) {
+                msg.textContent = 'Заполните все поля!';
+                return;
+            }
+
+            try {
+                const userDoc = await db.collection('users').doc(nick.toLowerCase()).get();
+                if (!userDoc.exists || userDoc.data().password !== password) {
+                    msg.textContent = 'Неверный никнейм или пароль!';
+                    return;
+                }
+
+                localStorage.setItem('colab_user', JSON.stringify(userDoc.data()));
+                window.location.href = 'index.html';
+            } catch (err) {
+                msg.textContent = 'Ошибка подключения к базе данных.';
+            }
+        });
+    }
+
+    // Обработка клика по кнопке "Зарегистрироваться"
+    const regBtn = document.getElementById('registerButton');
+    if (regBtn) {
+        regBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const nick = document.getElementById('registerNick').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const role = document.getElementById('registerRole').value;
+            const msg = document.getElementById('registerMessage');
+            msg.textContent = '';
+
+            if (!nick || !password) {
+                msg.textContent = 'Заполните все поля!';
+                return;
+            }
+
+            if (password.length < 6) {
+                msg.textContent = 'Пароль должен быть минимум 6 символов!';
+                return;
+            }
+
+            try {
+                const userDocRef = db.collection('users').doc(nick.toLowerCase());
+                const doc = await userDocRef.get();
+
+                if (doc.exists) {
+                    msg.textContent = 'Этот никнейм уже занят!';
+                    return;
+                }
+
+                const newUser = { nick: nick, password: password, role: role };
+                await userDocRef.set(newUser);
+                localStorage.setItem('colab_user', JSON.stringify(newUser));
+                window.location.href = 'index.html';
+            } catch (err) {
+                msg.textContent = 'Ошибка сохранения данных.';
+            }
+        });
+    }
+}
+
+/* === ГЛАВНАЯ СТРАНИЦА И ЗАДАЧИ === */
 function renderPosts(posts) {
     const postsList = getEl('#postsList');
     if (!postsList) return;
@@ -44,7 +154,7 @@ function renderPosts(posts) {
 
     const visible = posts.filter(p => {
         const matchFilter = (activeFilter === 'all') || (p.role === activeFilter);
-        const matchSearch = (p.title + ' ' + p.description + ' ' + p.tag).toLowerCase().includes(query);
+        const matchSearch = (p.title + ' ' + p.description + ' ' + (p.tag || '')).toLowerCase().includes(query);
         return matchFilter && matchSearch;
     });
 
@@ -58,16 +168,8 @@ function renderPosts(posts) {
         const p = visible[i];
         const isOwner = currentUser && p.author.toLowerCase() === currentUser.nick.toLowerCase();
         
-        let deleteBtnHtml = '';
-        if (isOwner) {
-            deleteBtnHtml = '<button class="deleteButton" data-delete="' + p.id + '">Удалить</button>';
-        }
-
-        let emailHtml = '';
-        if (p.email) {
-            emailHtml = '<a href="mailto:' + p.email + '" class="postContact">✉ ' + p.email + '</a>';
-        }
-
+        let deleteBtnHtml = isOwner ? '<button class="deleteButton" data-delete="' + p.id + '">Удалить</button>' : '';
+        let emailHtml = p.email ? '<a href="mailto:' + p.email + '" class="postContact">✉ ' + p.email + '</a>' : '';
         const roleText = roleNames[p.role] || 'Участник';
 
         html += '<article class="postCard">' +
@@ -81,7 +183,7 @@ function renderPosts(posts) {
             '<h3>' + p.title + '</h3>' +
             '<p>' + p.description + '</p>' +
             '<div class="postBottom">' +
-                '<span class="tag"># ' + p.tag + '</span>' +
+                '<span class="tag"># ' + (p.tag || '') + '</span>' +
                 emailHtml +
             '</div>' +
         '</article>';
@@ -91,44 +193,54 @@ function renderPosts(posts) {
 }
 
 function renderProfile(posts) {
-    const nickEl = getEl('#userNick');
-    if (!nickEl) return;
-    
-    nickEl.textContent = currentUser.nick;
-    getEl('#userRole').textContent = roleNames[currentUser.role] || 'Участник';
-    
-    const myPosts = posts.filter(p => p.author.toLowerCase() === currentUser.nick.toLowerCase());
-    getEl('#myPostsCount').textContent = myPosts.length;
+    const headerNick = getEl('#headerNick');
+    const headerAvatar = getEl('#headerAvatar');
+    const profileNick = getEl('#profileNick');
+    const profileAvatar = getEl('#profileAvatar');
+    const profileRole = getEl('#profileRole');
+    const profileProblems = getEl('#profileProblems');
+
+    if (currentUser) {
+        const letter = currentUser.nick.charAt(0).toUpperCase();
+        if (headerNick) headerNick.textContent = currentUser.nick;
+        if (headerAvatar) headerAvatar.textContent = letter;
+        if (profileNick) profileNick.textContent = currentUser.nick;
+        if (profileAvatar) profileAvatar.textContent = letter;
+        if (profileRole) profileRole.textContent = roleNames[currentUser.role] || 'Участник';
+        
+        const myPosts = posts.filter(p => p.author.toLowerCase() === currentUser.nick.toLowerCase());
+        if (profileProblems) profileProblems.textContent = myPosts.length;
+    }
 }
 
 if (isAppPage) {
     db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-        allPosts = snapshot.docs.map(doc => {
-            return Object.assign({ id: doc.id }, doc.data());
-        });
+        allPosts = snapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data()));
         renderPosts(allPosts);
         renderProfile(allPosts);
     }, error => {
-        console.error(error);
+        console.error("Ошибка загрузки постов:", error);
     });
 }
 
 document.addEventListener('click', async (e) => {
+    // Навигация по фильтрам
     const filterBtn = e.target.closest('[data-filter]');
     if (filterBtn) {
-        const filters = document.querySelectorAll('.filter');
-        filters.forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
         filterBtn.classList.add('active');
         renderPosts(allPosts);
         return;
     }
 
-    if (e.target.id === 'logoutBtn') {
+    // Выход из системы
+    if (e.target.id === 'logoutButton') {
         localStorage.removeItem('colab_user');
         window.location.href = 'reg.html';
         return;
     }
 
+    // Удаление поста
     const deleteId = e.target.dataset.delete;
     if (deleteId) {
         if (confirm('Удалить эту задачу?')) {
@@ -141,116 +253,8 @@ document.addEventListener('click', async (e) => {
     }
 });
 
+// Поиск
 const searchEl = getEl('#searchInput');
 if (searchEl) {
-    searchEl.addEventListener('input', () => {
-        renderPosts(allPosts);
-    });
-}
-
-const formEl = getEl('#postForm');
-if (formEl) {
-    formEl.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const title = getEl('#postTitle').value.trim();
-        const description = getEl('#postDesc').value.trim();
-        const tag = getEl('#postTag').value.trim();
-        const email = getEl('#postEmail').value.trim();
-
-        if (!title || !description || !tag) return;
-
-        try {
-            await db.collection('posts').add({
-                title: title,
-                description: description,
-                tag: tag,
-                email: email,
-                role: currentUser.role,
-                author: currentUser.nick,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            formEl.reset();
-        } catch (err) {
-            alert('Ошибка при публикации поста');
-        }
-    });
-}
-
-if (isAuthPage) {
-    const authForm = document.getElementById('authForm');
-    const authTitle = document.getElementById('authTitle');
-    const submitBtn = document.getElementById('submitBtn');
-    const toggleAuth = document.getElementById('toggleAuth');
-    const roleGroup = document.getElementById('roleGroup');
-    const authError = document.getElementById('authError');
-    let isReg = false;
-
-    if (toggleAuth) {
-        toggleAuth.addEventListener('click', function(e) {
-            e.preventDefault();
-            isReg = !isReg;
-            
-            if (isReg) {
-                authTitle.textContent = 'Создать аккаунт';
-                submitBtn.textContent = 'Зарегистрироваться →';
-                toggleAuth.textContent = 'Уже есть аккаунт? Войти';
-                if (roleGroup) roleGroup.style.display = 'block';
-            } else {
-                authTitle.textContent = 'Вход в аккаунт';
-                submitBtn.textContent = 'Войти →';
-                toggleAuth.textContent = 'Нет аккаунта? Зарегистрироваться';
-                if (roleGroup) roleGroup.style.display = 'none';
-            }
-            if (authError) authError.textContent = '';
-        });
-    }
-
-    if (authForm) {
-        authForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (authError) authError.textContent = '';
-            
-            const nickInput = document.getElementById('nick');
-            const passInput = document.getElementById('password');
-            const roleSelect = document.getElementById('role');
-
-            const nick = nickInput ? nickInput.value.trim() : '';
-            const password = passInput ? passInput.value.trim() : '';
-            const role = roleSelect ? roleSelect.value : 'student';
-
-            if (!nick || !password) {
-                if (authError) authError.textContent = 'Заполните все поля!';
-                return;
-            }
-
-            try {
-                const userDocRef = db.collection('users').doc(nick.toLowerCase());
-
-                if (isReg) {
-                    const doc = await userDocRef.get();
-                    if (doc.exists) {
-                        if (authError) authError.textContent = 'Этот никнейм уже занят!';
-                        return;
-                    }
-
-                    const newUser = { nick: nick, password: password, role: role };
-                    await userDocRef.set(newUser);
-                    localStorage.setItem('colab_user', JSON.stringify(newUser));
-                    window.location.href = 'index.html';
-                } else {
-                    const doc = await userDocRef.get();
-                    if (!doc.exists || doc.data().password !== password) {
-                        if (authError) authError.textContent = 'Неверный никнейм или пароль!';
-                        return;
-                    }
-
-                    localStorage.setItem('colab_user', JSON.stringify(doc.data()));
-                    window.location.href = 'index.html';
-                }
-            } catch (err) {
-                if (authError) authError.textContent = 'Ошибка сети или базы данных.';
-            }
-        });
-    }
+    searchEl.addEventListener('input', () => renderPosts(allPosts));
 }
