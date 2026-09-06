@@ -3,37 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoLab - Платформа</title>
-    <link rel="stylesheet" href="main.css">
+    <title>CoLab — Платформа для сотрудничества</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-<body id="appView">
-    <header class="appHeader">
-        <a href="#" class="brand">
-            <img src="logo.png" alt="Logo" class="brandLogo">
-            CoLab
-        </a>
-        <nav>
-            <button class="navButton active" data-page="posts">Задачи</button>
-            <button class="navButton" data-page="profile">Профиль</button>
-        </nav>
-        <div class="headerUser">
-            <div id="headerAvatar" class="avatar">U</div>
-            <span id="headerNick">Пользователь</span>
-            <button id="logoutButton" class="logoutButton" title="Выйти">↗</button>
+<body>
+
+    <!-- Шапка сайта -->
+    <header class="navbar">
+        <div class="navContainer">
+            <div class="logoGroup">
+                <h1 class="siteBrand">CoLab</h1>
+            </div>
+            
+            <div class="userPanel">
+                <div class="userAvatar" id="headerAvatar">?</div>
+                <span class="userNick" id="headerNick">Загрузка...</span>
+                <button id="logoutButton" class="secondaryButton">Выйти</button>
+            </div>
         </div>
     </header>
 
-    <main class="appMain">
-        <section id="postsPage" class="page">
-            <div class="pageHeading">
-                <h1>Актуальные<br><em>проблемы</em></h1>
-                <button id="newPostButton" class="primaryButton compact">+ Опубликовать задачу</button>
-            </div>
-            <div class="toolbar">
-                <div class="searchBox">
-                    🔍 <input type="text" id="searchInput" placeholder="Поиск задач...">
+    <!-- Основной контент -->
+    <main class="mainContainer">
+        <!-- Блок профиля -->
+        <aside class="profileSidebar">
+            <div class="profileCard">
+                <div class="profileAvatar" id="profileAvatar">?</div>
+                <h3 id="profileNick">Пользователь</h3>
+                <span class="roleBadge" id="profileRole">Роль</span>
+                
+                <div class="profileStats">
+                    <div class="statItem">
+                        <span class="statCount" id="profileProblems">0</span>
+                        <span class="statLabel">Задач создано</span>
+                    </div>
                 </div>
-                <div class="filters">
+            </div>
+        </aside>
+
+        <!-- Лента постов и фильтры -->
+        <section class="feedSection">
+            
+            <!-- Шапка с кнопкой и логотипом -->
+            <div class="feedHeader">
+                <div class="feedHeaderLeft">
+                    <h2>Актуальные проблемы</h2>
+                    <button class="primaryButton" id="openModalBtn">+ Опубликовать проблему</button>
+                </div>
+                <div class="feedHeaderRight">
+                    <img src="logo.png" alt="CoLab Logo" class="heroLogo">
+                </div>
+            </div>
+
+            <!-- Панель поиска и фильтров -->
+            <div class="filterBar">
+                <input type="text" id="searchInput" placeholder="Поиск по задачам или тегам..." class="searchInput">
+                <div class="filterGroup">
                     <button class="filter active" data-filter="all">Все</button>
                     <button class="filter" data-filter="student">Ученики</button>
                     <button class="filter" data-filter="scientist">Ученые</button>
@@ -41,55 +69,46 @@
                     <button class="filter" data-filter="other">Другое</button>
                 </div>
             </div>
-            <div id="postsList" class="postsList"></div>
-        </section>
 
-        <section id="profilePage" class="page hidden">
-            <div class="profileHero">
-                <div id="profileAvatar" class="profileAvatar">U</div>
-                <div>
-                    <h2 id="profileNick">Пользователь</h2>
-                    <div id="profileRole" class="profileRole">Участник</div>
-                </div>
-            </div>
-            <div class="profileStats">
-                <div>
-                    <strong id="profileProblems">0</strong>
-                    <span>Опубликовано задач</span>
-                </div>
-            </div>
-            <div class="profileColumns">
-                <div>
-                    <h3>Мои задачи</h3>
-                    <div id="myPosts" class="profileItems"></div>
-                </div>
+            <!-- Список карточек -->
+            <div id="postsList" class="postsGrid">
+                <div class="empty">Загрузка задач...</div>
             </div>
         </section>
     </main>
 
+    <!-- Модальное окно создания поста -->
     <div id="postModal" class="modal hidden">
-        <div class="modalCard">
-            <button class="closeButton" data-close="postModal">×</button>
-            <h2>Новая задача</h2>
-            <label>Заголовок
-                <input type="text" id="postTitle" placeholder="Краткое название">
-            </label>
-            <label>Описание
-                <textarea id="postDescription" rows="4" placeholder="Подробное описание проблемы..."></textarea>
-            </label>
-            <label>Ваша почта (для связи)
-                <input type="email" id="postEmail" placeholder="example@mail.com">
-            </label>
-            <label>Тег
-                <input type="text" id="postTag" placeholder="экология, IT и т.д.">
-            </label>
-            <div id="postMessage" class="message"></div>
-            <button id="savePostButton" class="primaryButton">Опубликовать</button>
+        <div class="modalContent">
+            <span class="closeModal" id="closeModalBtn">&times;</span>
+            <h3>Новая задача / проблема</h3>
+            
+            <form id="createPostForm">
+                <div class="formGroup">
+                    <label for="postTitle">Название задачи</label>
+                    <input type="text" id="postTitle" required placeholder="Например: Поиск исследователя для био-проекта">
+                </div>
+                
+                <div class="formGroup">
+                    <label for="postDesc">Описание</label>
+                    <textarea id="postDesc" rows="4" required placeholder="Опишите подробности вашей задачи..."></textarea>
+                </div>
+
+                <div class="formGroup">
+                    <label for="postTag">Тег / Категория</label>
+                    <input type="text" id="postTag" placeholder="Например: Биология, ИИ, Экология">
+                </div>
+
+                <div class="formGroup">
+                    <label for="postEmail">Email для связи</label>
+                    <input type="email" id="postEmail" placeholder="yourmail@example.com">
+                </div>
+
+                <button type="submit" class="primaryButton fullWidth">Опубликовать</button>
+            </form>
         </div>
     </div>
 
-   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
