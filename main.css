@@ -94,7 +94,7 @@ background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url
 background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
-width: 50%;
+width:100%;
 min-height: 100vh;
 }
 .authAside .brand {
