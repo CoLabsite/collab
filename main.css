@@ -1,522 +1,536 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root {
-  --ink: #17211f;
-  --muted: #6e7c77;
-  --paper: #f5f4ef;
-  --lime: #c8ef68;
-  --line: #dfe3dc;
-  --accent: #4058cf;
-  --white: #fff;
-}
+@import url(‘https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap’);
+
 * {
-  box-sizing: border-box;
-}
+    box-sizing: border-box;
+    }
+
 body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: Manrope, sans-serif;
+margin: 0;
+background: #f5f5f0;
+color: #214A52;
+font-family: Manrope, Arial, Helvetica, sans-serif;
 }
 button, input, textarea, select {
-  font: inherit;
+font: inherit;
 }
 button {
-  cursor: pointer;
-  border: 0;
+cursor: pointer;
+border: 0;
 }
 .hidden {
-  display: none !important;
+display: none !important;
 }
 .brand {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+color: #202020;
+text-decoration: none;
+font-weight: 800;
+font-size: 20px;
+letter-spacing: -1px;
+display: flex;
+align-items: center;
+gap: 10px;
 }
 .brandLogo {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+object-fit: cover;
 }
 .eyebrow, .mono {
-  font-family: 'DM Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 11px;
+font-family: ‘DM Mono’, monospace;
+text-transform: uppercase;
+letter-spacing: 2px;
+font-size: 10px;
 }
 .eyebrow {
-  color: #728078;
-  margin: 0 0 14px;
+color: #676767;
+margin: 0 0 15px;
 }
 h2 {
-  font-size: 34px;
-  letter-spacing: -1.5px;
-  margin: 0 0 10px;
+font-size: 35px;
+letter-spacing: -2px;
+margin: 0 0 10px;
 }
 .primaryButton {
-  width: 100%;
-  background: var(--ink);
-  color: #fff;
-  padding: 15px 18px;
-  border-radius: 5px;
-  font-weight: 800;
-  margin-top: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+width: 100%;
+background: #214A52;
+color: #ffffff;
+padding: 15px 20px;
+border-radius: 10px;
+font-weight: 800;
+margin-top: 15px;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
 .primaryButton:hover {
-  background: #30423c;
+background: #297E8F;
 }
 .primaryButton.compact {
-  width: auto;
-  margin: 0;
-  background: var(--accent);
-  color: #fff;
-  padding: 13px 16px;
+width: auto;
+margin: 0;
+background: #214A52;
+color: #ffffff;
+padding: 15px;
+border-radius: 10px;
 }
 .textButton {
-  background: none;
-  color: var(--accent);
-  text-decoration: underline;
-  padding: 0;
+background: none;
+color: #297E8F;
+text-decoration: underline;
+padding: 0;
 }
 .authLayout {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(320px, 42%) 1fr;
+min-height: 100vh;
+display: grid;
+grid-template-columns: minmax(320px, 40%) 1fr;
 }
 .authAside {
-  background: #20312e;
-  color: #f8f8f2;
-  padding: 38px 8%;
-  display: flex;
-  flex-direction: column;
+background: #214A52;
+color: #ffffff;
+padding: 40px 10%;
+display: flex;
+flex-direction: column;
 }
 .authAside .brand {
-  margin-bottom: auto;
+color: #ffffff;
+margin-bottom: auto;
 }
 .asideCopy {
-  max-width: 480px;
-  margin: auto 0;
+max-width: 480px;
+margin: auto 0;
 }
 .asideCopy h1 {
-  font-size: clamp(38px, 5vw, 68px);
-  line-height: 1.03;
-  letter-spacing: -3px;
-  margin: 0 0 24px;
+font-size: clamp(40px, 5vw, 70px);
+line-height: 1;
+letter-spacing: -3px;
+margin: 0 0 25px;
+}
+.asideCopy h1 em {
+color: #297E8F;
+font-style: normal;
 }
 .asideCopy p:not(.eyebrow) {
-  color: #b8c4ba;
-  line-height: 1.7;
-  max-width: 400px;
+color: #ffffff;
+line-height: 2;
+max-width: 400px;
 }
 .asideFoot {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: #b8c4ba;
-  margin-top: auto;
+font-family: ‘DM Mono’, monospace;
+font-size: 10px;
+color: #ffffff;
+margin-top: auto;
 }
 .signalDot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--lime);
-  margin-right: 8px;
+display: inline-block;
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: #297E8F;
+margin-right: 10px;
 }
 .authPanel {
-  display: flex;
-  flex-direction: column;
-  padding: 38px 7%;
+display: flex;
+flex-direction: column;
+padding: 40px 5%;
 }
 .authTop {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 12px;
+display: flex;
+justify-content: space-between;
+color: #676767;
+font-size: 12px;
 }
 .authCard {
-  max-width: 440px;
-  width: 100%;
-  margin: auto;
+max-width: 440px;
+width: 100%;
+margin: auto;
 }
 .authTabs {
-  display: flex;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 42px;
+display: flex;
+border-bottom: 1px solid #e0e0e0;
+margin-bottom: 40px;
 }
 .authTab {
-  padding: 0 0 14px;
-  margin-right: 28px;
-  background: none;
-  color: var(--muted);
-  font-weight: 700;
-  position: relative;
+padding: 0 0 15px;
+margin-right: 30px;
+background: none;
+color: #676767;
+font-weight: 700;
+position: relative;
 }
 .authTab.active {
-  color: var(--ink);
+color: #202020;
 }
 .authTab.active:after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
+content: ‘’;
+position: absolute;
+bottom: -1px;
+left: 0;
+right: 0;
+height: 3px;
+background: #297E8F;
 }
 .formNote {
-  color: var(--muted);
-  font-size: 14px;
-  margin: 0 0 30px;
+color: #676767;
+font-size: 15px;
+margin: 0 0 30px;
 }
 .authForm label, .modalCard label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  margin: 17px 0;
-  color: #52605b;
+display: block;
+font-size: 12px;
+font-weight: 700;
+margin: 15px 0;
+color: #676767;
 }
-.authForm input, .authForm select, .modalCard input, .modalCard textarea, .modalCard select {
-  width: 100%;
-  display: block;
-  border: 1px solid var(--line);
-  background: #fff;
-  padding: 14px 15px;
-  margin-top: 8px;
-  border-radius: 5px;
-  color: var(--ink);
-  outline-color: var(--accent);
+.authForm input,
+.authForm select,
+.modalCard input,
+.modalCard textarea,
+.modalCard select {
+width: 100%;
+display: block;
+border: 1px solid #cccccc;
+background: #ffffff;
+padding: 15px;
+margin-top: 10px;
+border-radius: 5px;
+color: #214A52;
+outline-color: #297E8F;
 }
 .passwordWrap {
-  position: relative;
+position: relative;
 }
 .passwordWrap input {
-  padding-right: 85px;
+padding-right: 85px;
 }
 .passwordToggle {
-  position: absolute;
-  right: 10px;
-  top: 18px;
-  background: none;
-  color: var(--muted);
-  font-size: 11px;
+position: absolute;
+right: 10px;
+top: 20px;
+background: none;
+color: #676767;
+font-size: 10px;
 }
 .message {
-  min-height: 18px;
-  color: #d45a3e;
-  font-size: 12px;
-  margin: 11px 0;
+min-height: 20px;
+color: #297E8F;
+font-size: 12px;
+margin: 10px 0;
 }
 .switchNote {
-  font-size: 12px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 25px;
+font-size: 12px;
+color: #676767;
+text-align: center;
+margin-top: 25px;
 }
 .appHeader {
-  height: 78px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  padding: 0 5%;
-  gap: 70px;
-  background: rgba(245, 244, 239, 0.9);
+height: 80px;
+border-bottom: 1px solid #e0e0e0;
+display: flex;
+align-items: center;
+padding: 0 5%;
+gap: 70px;
+background: #f5f5f0;
 }
 nav {
-  display: flex;
-  height: 100%;
-  gap: 28px;
+display: flex;
+height: 100%;
+gap: 30px;
 }
 .navButton {
-  background: none;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
-  position: relative;
+background: none;
+color: #676767;
+font-size: 13px;
+font-weight: 700;
+position: relative;
 }
 .navButton.active {
-  color: var(--ink);
+color: #202020;
 }
 .navButton.active:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
+content: ‘’;
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+height: 3px;
+background: #297E8F;
 }
 .headerUser {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 12px;
-  font-weight: 700;
+margin-left: auto;
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 12px;
+font-weight: 700;
 }
 .avatar, .profileAvatar {
-  display: grid;
-  place-items: center;
-  background: var(--lime);
-  border-radius: 50%;
-  font-weight: 800;
+display: grid;
+place-items: center;
+background: #297E8F;
+color: #ffffff;
+border-radius: 50%;
+font-weight: 800;
 }
 .avatar {
-  width: 29px;
-  height: 29px;
-  font-size: 12px;
+width: 30px;
+height: 30px;
+font-size: 12px;
 }
 .logoutButton {
-  background: none;
-  font-size: 20px;
-  color: var(--muted);
-  margin-left: 12px;
-  transform: rotate(90deg);
+background: none;
+font-size: 20px;
+color: #676767;
+margin-left: 10px;
+transform: rotate(90deg);
 }
 .appMain {
-  max-width: 1120px;
-  margin: auto;
-  padding: 70px 5%;
+max-width: 1000px;
+margin: auto;
+padding: 70px 5%;
 }
 .pageHeading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 50px;
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+margin-bottom: 50px;
 }
 .page h1 {
-  font-size: clamp(38px, 6vw, 70px);
-  line-height: 0.98;
-  letter-spacing: -4px;
-  margin: 0;
+font-size: clamp(40px, 6vw, 70px);
+line-height: 1;
+letter-spacing: -4px;
+margin: 0;
 }
 .page h1 em {
-  font-style: normal;
-  color: var(--accent);
+font-style: normal;
+color: #297E8F;
 }
 .toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 14px;
-  margin-bottom: 25px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid #e0e0e0;
+padding-bottom: 15px;
+margin-bottom: 25px;
 }
 .searchBox {
-  display: flex;
-  gap: 9px;
-  align-items: center;
-  color: var(--muted);
+display: flex;
+gap: 10px;
+align-items: center;
+color: #676767;
 }
 .searchBox input {
-  border: 0;
-  background: none;
-  outline: 0;
-  width: 230px;
-  font-size: 13px;
+border: 0;
+border-bottom: 1px solid #202020;
+background: none;
+outline: 0;
+width: 230px;
+font-size: 13px;
+padding: 10px;
 }
 .filters {
-  display: flex;
-  gap: 18px;
+display: flex;
+gap: 20px;
 }
 .filter {
-  background: none;
-  color: var(--muted);
-  font-size: 12px;
+background: none;
+color: #676767;
+font-size: 12px;
 }
 .filter.active {
-  color: var(--ink);
-  font-weight: 800;
+color: #ffffff;
+background: #676767;
+font-weight: 800;
+padding: 5px 10px;
+border-radius: 5px;
 }
 .postsList {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
 }
 .postCard {
-  background: #fff;
-  border: 1px solid var(--line);
-  padding: 25px;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
+background: #ffffff;
+border: 1px solid #e0e0e0;
+border-radius: 15px;
+padding: 25px;
+min-height: 220px;
+display: flex;
+flex-direction: column;
 }
 .postCard:hover {
-  border-color: #aabd9f;
+border-color: #297E8F;
 }
 .postMeta {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 11px;
-  margin-bottom: 20px;
+display: flex;
+justify-content: space-between;
+color: #676767;
+font-size: 11px;
+margin-bottom: 20px;
 }
 .roleLabel {
-  color: var(--accent);
-  font-family: 'DM Mono';
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: bold;
+color: #297E8F;
+font-family: ‘DM Mono’;
+text-transform: uppercase;
+font-size: 10px;
+font-weight: bold;
 }
 .postCard h3 {
-  font-size: 20px;
-  line-height: 1.2;
-  margin: 0 0 12px;
-  letter-spacing: -0.6px;
+font-size: 20px;
+line-height: 1;
+margin: 0 0 10px;
+letter-spacing: -1px;
+color: #202020;
 }
 .postCard p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0 0 15px;
+color: #676767;
+font-size: 13px;
+line-height: 2;
+margin: 0 0 15px;
 }
 .postBottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding-top: 15px;
-  border-top: 1px solid var(--line);
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: auto;
+padding-top: 15px;
+border-top: 1px solid #e0e0e0;
 }
 .tag {
-  font-family: 'DM Mono';
-  color: #718078;
-  font-size: 10px;
+font-family: ‘DM Mono’;
+color: #676767;
+font-size: 10px;
 }
 .postContact {
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
+font-size: 12px;
+color: #297E8F;
+font-weight: 600;
+text-decoration: none;
 }
 .empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 50px;
-  color: var(--muted);
+grid-column: 1 / -1;
+text-align: center;
+padding: 50px;
+color: #676767;
 }
 .profileHero {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 40px;
+display: flex;
+align-items: center;
+gap: 25px;
+border-bottom: 1px solid #e0e0e0;
+padding-bottom: 40px;
 }
 .profileAvatar {
-  width: 84px;
-  height: 84px;
-  font-size: 30px;
+width: 85px;
+height: 85px;
+font-size: 30px;
 }
 .profileRole {
-  color: var(--muted);
-  margin: 8px 0;
+color: #676767;
+margin: 10px 0;
 }
 .profileStats {
-  display: flex;
-  gap: 70px;
-  padding: 28px 0 48px;
-  border-bottom: 1px solid var(--line);
+display: flex;
+gap: 70px;
+padding: 30px 0 50px;
+border-bottom: 1px solid #e0e0e0;
 }
 .profileStats div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+display: flex;
+flex-direction: column;
+gap: 5px;
 }
 .profileStats strong {
-  font-size: 27px;
+font-size: 25px;
+color: #214A52;
 }
 .profileStats span {
-  font-size: 11px;
-  color: var(--muted);
+font-size: 10px;
+color: #676767;
 }
 .profileColumns {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  margin-top: 40px;
+display: grid;
+grid-template-columns: 1fr;
+gap: 40px;
+margin-top: 40px;
 }
 .profileItem {
-  border-top: 1px solid var(--line);
-  padding: 15px 0;
+border-top: 1px solid #e0e0e0;
+padding: 15px 0;
 }
 .profileItem strong {
-  display: block;
-  color: var(--ink);
-  margin-bottom: 5px;
+display: block;
+color: #202020;
+margin-bottom: 5px;
 }
 .modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(23, 33, 31, 0.62);
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  z-index: 5;
+position: fixed;
+inset: 0;
+background: rgba(0, 0, 0, 0.5);
+display: grid;
+place-items: center;
+padding: 20px;
+z-index: 5;
 }
 .modalCard {
-  position: relative;
-  background: var(--paper);
-  width: min(100%, 520px);
-  padding: 34px;
+position: relative;
+background: #ffffff;
+width: min(100%, 520px);
+padding: 35px;
+border-radius: 15px;
 }
 .modalCard h2 {
-  margin-bottom: 24px;
+margin-bottom: 25px;
+color: #214A52;
 }
 .modalCard textarea {
-  resize: vertical;
+resize: vertical;
 }
 .closeButton {
-  position: absolute;
-  right: 18px;
-  top: 14px;
-  background: none;
-  font-size: 25px;
-  color: var(--muted);
+position: absolute;
+right: 20px;
+top: 15px;
+background: none;
+font-size: 25px;
+color: #696969;
 }
 @media (max-width: 700px) {
-  .authLayout {
-    display: block;
-  }
-  .authAside {
-    min-height: 310px;
-    padding: 26px 7%;
-  }
-  .asideCopy h1 {
-    font-size: 38px;
-  }
-  .asideCopy p:not(.eyebrow), .asideFoot {
-    display: none;
-  }
-  .authPanel {
-    padding: 28px 7%;
-  }
-  .appHeader {
-    padding: 0 20px;
-    gap: 22px;
-  }
-  .appMain {
-    padding: 45px 20px;
-  }
-  .pageHeading {
-    display: block;
-    margin-bottom: 35px;
-  }
-  .toolbar {
-    display: block;
-  }
-  .filters {
-    margin-top: 18px;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .postsList {
-    grid-template-columns: 1fr;
-  }
+.authLayout {
+display: block;
+}
+.authAside {
+min-height: 310px;
+padding: 25px 5%;
+}
+.asideCopy h1 {
+font-size: 40px;
+}
+.asideCopy p:not(.eyebrow), .asideFoot {
+display: none;
+}
+.authPanel {
+padding: 30px 5%;
+}
+.appHeader {
+padding: 0 20px;
+gap: 20px;
+}
+.appMain {
+padding: 45px 20px;
+}
+.pageHeading {
+display: block;
+margin-bottom: 35px;
+}
+.toolbar {
+display: block;
+}
+.filters {
+margin-top: 20px;
+gap: 10px;
+flex-wrap: wrap;
+}
+.postsList {
+grid-template-columns: 1fr;
+}
 }
