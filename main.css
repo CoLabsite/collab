@@ -99,6 +99,9 @@ margin-bottom: auto;
 .asideCopy {
 max-width: 480px;
 margin: auto 0;
+background-image: url('WhatsApp Image 2026-09-08 at 17.18.05');
+    background-position:center;
+    background-repeat: no-repeat;
 }
 .asideCopy h1 {
 font-size: clamp(40px, 5vw, 70px);
