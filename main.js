@@ -63,7 +63,7 @@ if (isAuthPage) {
             const nick = document.getElementById('loginNick').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
             const msg = document.getElementById('loginMessage');
-            msg.textContent = '';
+            msg.textContent= '';
             if (!nick || !password) {
                 msg.textContent = 'Заполните все поля!';
                 return;
@@ -95,14 +95,14 @@ if (isAuthPage) {
                 return;
             }
             if (password.length < 6) {
-                msg.textContent = 'Пароль должен быть минимум 6 символов!';
+                msg.textContent ='Пароль должен быть минимум 6 символов!';
                 return;
             }
             try {
-                const userDocRef = db.collection('users').doc(nick.toLowerCase());
+                const userDocRef =db.collection('users').doc(nick.toLowerCase());
                 const doc = await userDocRef.get();
                 if (doc.exists) {
-                    msg.textContent = 'Этот никнейм уже занят!';
+                    msg.textContent ='Этот никнейм уже занят!';
                     return;
                 }
                 const newUser = { nick: nick, password: password, role: role };
@@ -242,7 +242,7 @@ document.addEventListener('click', async (e) => {
         if (page === 'posts') {
             if (postsPage) postsPage.classList.remove('hidden');
             if (profilePage) profilePage.classList.add('hidden');
-        } else if (page === 'profile') {
+        } else if (page==='profile') {
             if (postsPage) postsPage.classList.add('hidden');
             if (profilePage) profilePage.classList.remove('hidden');
         }
