@@ -40,6 +40,7 @@
             </div>
             <div id="postsList" class="postsList"></div>
         </section>
+
         <section id="profilePage" class="page hidden">
             <div class="profileHero">
                 <div>
@@ -52,30 +53,64 @@
                     <strong id="profileProblems">0</strong>
                     <span>Опубликовано задач</span>
                 </div>
+                <div>
+                    <strong id="profileSolutions">0</strong>
+                    <span>Предложено решений</span>
+                </div>
+            </div>
+            <div class="profileColumns">
+                <div>
+                    <h3>Мои проблемы</h3>
+                    <div id="myPostsList" class="profileItemsList"></div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <h3>Мои решения</h3>
+                    <div id="mySolutionsList" class="profileItemsList"></div>
+                </div>
             </div>
         </section>
-    </main>
+    </main>>
     <div id="postModal" class="modal hidden">
         <div class="modalCard">
             <button class="closeButton" data-close="postModal">×</button>
             <h2>Новая задача</h2>
-            <label>Заголовок
-                <input type="text" id="postTitle" placeholder="Краткое название">
+            <label>Заголовок *
+                <input type="text" id="postTitle" placeholder="Краткое название (обязательно)">
             </label>
-            <label>Описание
-                <textarea id="postDescription" rows="4" placeholder="Подробное описание проблемы..."></textarea>
+            <label>Описание *
+    <textarea id="postDescription" rows="4" maxlength="400" placeholder="Подробное описание проблемы... (обязательно)"></textarea>
+    <div class="charCounter"><span id="descCharCount">0</span> / 400 символов</div>
+</label>
+            <label>Ссылка на доп. материалы (GitHub, Figma, диск и т.д.)
+                <input type="url" id="postLink" placeholder="https://...">
             </label>
-            <label>Ваша почта/Телеграм/номер (для связи)
+            <label>Ваша почта / Телеграм (для связи)
                 <input type="email" id="postEmail" placeholder="example@mail.com">
             </label>
-            <label>Тег<input type="text" id="postTag" placeholder="экология, IT и т.д.">
+            <label>Тег
+                <input type="text" id="postTag" placeholder="экология, IT и т.д.">
             </label>
             <div id="postMessage" class="message"></div>
             <button id="savePostButton" class="primaryButton">Опубликовать</button>
         </div>
     </div>
+    <div id="solutionModal" class="modal hidden">
+        <div class="modalCard">
+            <button class="closeButton" data-close="solutionModal">×</button>
+            <h2>Предложить решение</h2>
+            <input type="hidden" id="targetPostId">
+            <label>Ваше решение / Комментарий *
+                <textarea id="solutionDescription" rows="4" placeholder="Опишите, как вы предлагаете решить проблему..."></textarea>
+            </label>
+            <label>Ссылка на решение (GitHub, репозиторий, документ)
+                <input type="url" id="solutionLink" placeholder="https://github.com/...">
+            </label>
+            <div id="solutionMessage" class="message"></div>
+            <button id="saveSolutionButton" class="primaryButton">Отправить решение</button>
+        </div>
+    </div>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
