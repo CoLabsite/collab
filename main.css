@@ -479,11 +479,13 @@ padding: 20px;
 z-index: 5;
 }
 .modalCard {
-position: relative;
-background: #ffffff;
-width: min(100%, 520px);
-padding: 35px;
-border-radius: 15px;
+    position: relative;
+    background: #ffffff;
+    width: min(100%, 520px);
+    padding: 35px;
+    border-radius: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 .modalCard h2 {
 margin-bottom: 25px;
@@ -539,4 +541,50 @@ flex-wrap: wrap;
 .postsList {
 grid-template-columns: 1fr;
 }
+}
+.solutionsSection {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #cccccc;
+}
+.solutionsSection h4 {
+    font-size: 13px;
+    margin: 0 0 10px;
+    color: #214A52;
+}
+.solutionCard {
+    background: #fafaf5;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+.profileItemsList {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.toggleSolutionsBtn {
+    background: none;
+    color: #297E8F;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.toggleSolutionsBtn:hover {
+    text-decoration: underline;
+}
+.solutionsWrapper {
+    margin-top: 10px;
+}
+.charCounter {
+    font-size: 11px;
+    color: #676767;
+    text-align: right;
+    margin-top: 4px;
 }
