@@ -124,8 +124,6 @@ if (isAuthPage) {
         });
     }
 }
-
-// Функция для красивого форматирования даты
 function formatDate(timestamp) {
     if (!timestamp || !timestamp.toDate) return 'Недавно';
     const date = timestamp.toDate();
