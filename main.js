@@ -125,6 +125,18 @@ if (isAuthPage) {
     }
 }
 
+// Функция для красивого форматирования даты
+function formatDate(timestamp) {
+    if (!timestamp || !timestamp.toDate) return 'Недавно';
+    const date = timestamp.toDate();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}.${month}.${year} в ${hours}:${minutes}`;
+}
+
 function renderPosts(posts, solutions) {
     const postsList = getEl('#postsList');
     if (!postsList) return;
@@ -152,6 +164,7 @@ function renderPosts(posts, solutions) {
         let emailHtml = p.email ? '<a href="mailto:' + p.email + '" class="postContact">✉ ' + p.email + '</a>' : '';
         let linkHtml = p.link ? '<a href="' + p.link + '" target="_blank" class="postContact">🔗 Материалы</a>' : '';
         const roleText = roleNames[p.role] || 'Участник';
+        const dateFormatted = formatDate(p.createdAt);
 
         const postSolutions = solutions.filter(s => s.postId === p.id);
         
@@ -185,6 +198,7 @@ function renderPosts(posts, solutions) {
             '<div class="postMeta">' +
                 '<span class="roleLabel">' + roleText + '</span>' +
                 '<div style="display:flex; gap:10px; align-items:center;">' +
+                    '<span style="font-size:10px; color:#888;">📅 ' + dateFormatted + '</span>' +
                     '<span>Автор: ' + p.author + '</span>' +
                     deleteBtnHtml +
                 '</div>' +
@@ -454,12 +468,14 @@ document.addEventListener('click', async (e) => {
         return;
     }
 });
+
 window.addEventListener('click', (e) => {
     const postModal = getEl('#postModal');
     const solModal = getEl('#solutionModal');
     if (e.target === postModal) postModal.classList.add('hidden');
     if (e.target === solModal) solModal.classList.add('hidden');
 });
+
 const searchEl = getEl('#searchInput');
 if (searchEl) {
     searchEl.addEventListener('input', () => renderPosts(allPosts, allSolutions));
