@@ -125,7 +125,6 @@ if (isAuthPage) {
     }
 }
 
-// Отрисовка постов и скрытых блоков решений
 function renderPosts(posts, solutions) {
     const postsList = getEl('#postsList');
     if (!postsList) return;
@@ -161,7 +160,8 @@ function renderPosts(posts, solutions) {
             const isSolOwner = currentUser && sol.author && sol.author.toLowerCase() === currentUser.nick.toLowerCase();
             let deleteSolBtn = isSolOwner ? '<button class="deleteButton" data-delete-sol="' + sol.id + '" style="font-size:10px;">Удалить</button>' : '';
             let solLinkHtml = sol.link ? '<br><a href="' + sol.link + '" target="_blank" class="postContact">🔗 Ссылка на решение</a>' : '';
-            
+            let solContactHtml = sol.contact ? '<br><span class="postContact" style="font-size:11px;">✉ Контакт: ' + sol.contact + '</span>' : '';
+
             solutionsListHtml += '<div class="solutionCard">' +
                 '<div style="display:flex; justify-content:space-between; font-size:11px; color:#676767;">' +
                     '<span><strong>' + sol.author + '</strong></span>' +
@@ -169,6 +169,7 @@ function renderPosts(posts, solutions) {
                 '</div>' +
                 '<p style="margin:5px 0; font-size:12px;">' + sol.description + '</p>' +
                 solLinkHtml +
+                solContactHtml +
             '</div>';
         });
 
@@ -200,7 +201,6 @@ function renderPosts(posts, solutions) {
     postsList.innerHTML = html;
 }
 
-// Отрисовка профиля
 function renderProfile(posts, solutions) {
     const headerNick = getEl('#headerNick');
     const profileNick = getEl('#profileNick');
@@ -232,7 +232,6 @@ function renderProfile(posts, solutions) {
 }
 
 if (!isAuthPage) {
-    // Слушатель постов
     db.collection('posts').onSnapshot(postSnapshot => {
         allPosts = postSnapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data()));
         allPosts.sort((a, b) => {
@@ -246,7 +245,6 @@ if (!isAuthPage) {
         console.error("Ошибка загрузки постов:", error);
     });
 
-    // Слушатель решений
     db.collection('solutions').onSnapshot(solSnapshot => {
         allSolutions = solSnapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data()));
         allSolutions.sort((a, b) => {
@@ -272,7 +270,6 @@ if (!isAuthPage) {
         closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
     }
 
-    // Живой счетчик символов
     const descInput = getEl('#postDescription');
     const charCounter = getEl('#descCharCount');
     if (descInput && charCounter) {
@@ -281,7 +278,6 @@ if (!isAuthPage) {
         });
     }
 
-    // Сохранение проблемы (до 400 символов)
     if (saveBtn) {
         saveBtn.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -327,7 +323,6 @@ if (!isAuthPage) {
         });
     }
 
-    // Отправка решения
     const solModal = getEl('#solutionModal');
     const closeSolBtn = getEl('[data-close="solutionModal"]');
     const saveSolBtn = getEl('#saveSolutionButton');
@@ -342,6 +337,7 @@ if (!isAuthPage) {
             const postId = getEl('#targetPostId').value;
             const description = getEl('#solutionDescription').value.trim();
             const link = getEl('#solutionLink').value.trim();
+            const contact = getEl('#solutionContact').value.trim();
             const msg = getEl('#solutionMessage');
 
             if (!description) {
@@ -354,11 +350,13 @@ if (!isAuthPage) {
                     postId: postId,
                     description: description,
                     link: link,
+                    contact: contact,
                     author: currentUser ? currentUser.nick : 'Аноним',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 getEl('#solutionDescription').value = '';
                 getEl('#solutionLink').value = '';
+                getEl('#solutionContact').value = '';
                 if (msg) msg.textContent = '';
                 solModal.classList.add('hidden');
             } catch (err) {
@@ -368,7 +366,6 @@ if (!isAuthPage) {
     }
 }
 
-// Глобальные клики и события
 document.addEventListener('click', async (e) => {
     const navBtn = e.target.closest('.navButton');
     if (navBtn) {
@@ -401,7 +398,6 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Раскрытие / сворачивание списка решений
     const toggleBtn = e.target.closest('[data-toggle-solutions]');
     if (toggleBtn) {
         const postId = toggleBtn.dataset.toggleSolutions;
@@ -419,7 +415,6 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Открытие модалки добавления решения
     const openSolBtn = e.target.closest('[data-open-solution]');
     if (openSolBtn) {
         const postId = openSolBtn.dataset.openSolution;
@@ -428,7 +423,6 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Удаление задачи
     const deletePostId = e.target.dataset.deletePost;
     if (deletePostId) {
         if (confirm('Удалить эту задачу?')) {
@@ -441,7 +435,6 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Удаление решения
     const deleteSolId = e.target.dataset.deleteSol;
     if (deleteSolId) {
         if (confirm('Удалить это решение?')) {
@@ -454,7 +447,6 @@ document.addEventListener('click', async (e) => {
         return;
     }
 
-    // Закрытие модалок по крестику
     const closeAttr = e.target.dataset.close;
     if (closeAttr) {
         const modalEl = getEl('#' + closeAttr);
@@ -462,15 +454,12 @@ document.addEventListener('click', async (e) => {
         return;
     }
 });
-
-// Закрытие модалок при клике вне окна
 window.addEventListener('click', (e) => {
     const postModal = getEl('#postModal');
     const solModal = getEl('#solutionModal');
     if (e.target === postModal) postModal.classList.add('hidden');
     if (e.target === solModal) solModal.classList.add('hidden');
 });
-
 const searchEl = getEl('#searchInput');
 if (searchEl) {
     searchEl.addEventListener('input', () => renderPosts(allPosts, allSolutions));
