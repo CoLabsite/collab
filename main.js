@@ -196,7 +196,6 @@ function renderPosts(posts, solutions) {
             '<div class="postMeta">' +
                 '<span class="roleLabel">' + roleText + '</span>' +
                 '<div style="display:flex; gap:10px; align-items:center;">' +
-                    '<span style="font-size:10px; color:#888;">📅 ' + dateFormatted + '</span>' +
                     '<span>Автор: ' + p.author + '</span>' +
                     deleteBtnHtml +
                 '</div>' +
