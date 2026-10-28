@@ -124,6 +124,8 @@ if (isAuthPage) {
         });
     }
 }
+
+// Функция для красивого форматирования даты
 function formatDate(timestamp) {
     if (!timestamp || !timestamp.toDate) return 'Недавно';
     const date = timestamp.toDate();
@@ -175,7 +177,6 @@ function renderPosts(posts, solutions) {
 
             solutionsListHtml += '<div class="solutionCard">' +
                 '<div style="display:flex; justify-content:space-between; font-size:11px; color:#676767;">' +
-                <span style="font-size:10px; color:#888;">' + dateFormatted + '</span>
                     '<span><strong>' + sol.author + '</strong></span>' +
                     deleteSolBtn +
                 '</div>' +
@@ -197,6 +198,7 @@ function renderPosts(posts, solutions) {
             '<div class="postMeta">' +
                 '<span class="roleLabel">' + roleText + '</span>' +
                 '<div style="display:flex; gap:10px; align-items:center;">' +
+                    '<span style="font-size:10px; color:#888;"> ' + dateFormatted + '</span>' +
                     '<span>Автор: ' + p.author + '</span>' +
                     deleteBtnHtml +
                 '</div>' +
