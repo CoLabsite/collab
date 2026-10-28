@@ -99,12 +99,15 @@
             <button class="closeButton" data-close="solutionModal">×</button>
             <h2>Предложить решение</h2>
             <input type="hidden" id="targetPostId">
-            <label>Ваше решение / Комментарий *
+            <label>Ваше решение
                 <textarea id="solutionDescription" rows="4" placeholder="Опишите, как вы предлагаете решить проблему..."></textarea>
             </label>
             <label>Ссылка на решение (GitHub, репозиторий, документ)
                 <input type="url" id="solutionLink" placeholder="https://github.com/...">
             </label>
+            <label>Contact Info (Email / Telegram / Phone)
+    <input type="text" id="solutionContact" placeholder="example@mail.com or @telegram">
+</label>
             <div id="solutionMessage" class="message"></div>
             <button id="saveSolutionButton" class="primaryButton">Отправить решение</button>
         </div>
