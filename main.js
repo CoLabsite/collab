@@ -175,6 +175,7 @@ function renderPosts(posts, solutions) {
 
             solutionsListHtml += '<div class="solutionCard">' +
                 '<div style="display:flex; justify-content:space-between; font-size:11px; color:#676767;">' +
+                <span style="font-size:10px; color:#888;">' + dateFormatted + '</span>
                     '<span><strong>' + sol.author + '</strong></span>' +
                     deleteSolBtn +
                 '</div>' +
