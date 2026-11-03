@@ -9,66 +9,74 @@
 <body id="authView">
     <div class="authLayout">
         <aside class="authAside">
-            <a href="#" class="brand">
-                <img src="logotip.img" alt="Logo" class="brandLogo">
-                CoLab
-            </a>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <a href="#" class="brand">
+                    <img src="logotip.img" alt="Logo" class="brandLogo">
+                    CoLab
+                </a>
+                <!-- Кнопки смены языка на панели входа -->
+                <div class="langSwitcher dark">
+                    <button type="button" class="langBtn active" data-lang="ru">RU</button>
+                    <span class="langDivider">/</span>
+                    <button type="button" class="langBtn" data-lang="en">EN</button>
+                </div>
+            </div>
             <div class="asideCopy">
-                <p class="eyebrow"><span class="signalDot"></span>Платформа идей</p>
-                <h1>Объединяем науки и решения.</h1>
-                <p>Платформа для совместной работы учеников, ученых и организаций.</p>
+                <p class="eyebrow"><span class="signalDot"></span><span data-i18n="asideEyebrow">Платформа идей</span></p>
+                <h1><span data-i18n="asideTitle1">Объединяем науки</span> <em data-i18n="asideTitle2">и решения.</em></h1>
+                <p data-i18n="asideDesc">Платформа для совместной работы учеников, ученых и организаций.</p>
             </div>
             <div class="asideFoot">© CoLab 2026</div>
         </aside>
         <main class="authPanel">
             <div class="authCard">
                 <div class="authTabs">
-                    <button class="authTab active" data-auth="login">Вход</button>
-                    <button class="authTab" data-auth="register">Регистрация</button>
+                    <button class="authTab active" data-auth="login" data-i18n="tabLogin">Вход</button>
+                    <button class="authTab" data-auth="register" data-i18n="tabRegister">Регистрация</button>
                 </div>
                 <div id="loginForm" class="authForm">
-                    <h2>С возвращением</h2>
-                    <p class="formNote">Введите свои данные для входа</p>
-                    <label>Никнейм
-                        <input type="text" id="loginNick" placeholder="Ваш никнейм">
+                    <h2 data-i18n="loginHeader">С возвращением</h2>
+                    <p class="formNote" data-i18n="loginSub">Введите свои данные для входа</p>
+                    <label><span data-i18n="labelNick">Никнейм</span>
+                        <input type="text" id="loginNick" data-i18n-placeholder="placeholderNick" placeholder="Ваш никнейм">
                     </label>
-                    <label>Пароль
+                    <label><span data-i18n="labelPass">Пароль</span>
                         <div class="passwordWrap">
-                            <input type="password" id="loginPassword" placeholder="Пароль">
-                            <button type="button" class="passwordToggle" data-target="loginPassword">Показать</button>
+                            <input type="password" id="loginPassword" data-i18n-placeholder="placeholderPass" placeholder="Пароль">
+                            <button type="button" class="passwordToggle" data-target="loginPassword" data-i18n="showPassBtn">Показать</button>
                         </div>
                     </label>
                     <div id="loginMessage" class="message"></div>
-                    <button id="loginButton" class="primaryButton">Войти →</button>
+                    <button id="loginButton" class="primaryButton"><span data-i18n="loginBtnText">Войти</span> →</button>
                 </div>
                 <div id="registerForm" class="authForm hidden">
-                    <h2>Создать аккаунт</h2>
-                    <p class="formNote">Заполните поля для регистрации</p>
-                    <label>Никнейм
-                        <input type="text" id="registerNick" placeholder="Придумайте никнейм">
+                    <h2 data-i18n="regHeader">Создать аккаунт</h2>
+                    <p class="formNote" data-i18n="regSub">Заполните поля для регистрации</p>
+                    <label><span data-i18n="labelNick">Никнейм</span>
+                        <input type="text" id="registerNick" data-i18n-placeholder="placeholderRegNick" placeholder="Придумайте никнейм">
                     </label>
-                    <label>Роль
+                    <label><span data-i18n="labelRole">Роль</span>
                         <select id="registerRole">
-                            <option value="student">Ученик</option>
-                            <option value="scientist">Ученый</option>
-                            <option value="company">Компания</option>
-                            <option value="other">Другое</option>
+                            <option value="student" data-i18n="roleStudent">Ученик</option>
+                            <option value="scientist" data-i18n="roleScientist">Ученый</option>
+                            <option value="company" data-i18n="roleCompany">Компания</option>
+                            <option value="other" data-i18n="roleOther">Другое</option>
                         </select>
                     </label>
-                    <label>Пароль
+                    <label><span data-i18n="labelPass">Пароль</span>
                         <div class="passwordWrap">
-                            <input type="password" id="registerPassword" placeholder="Минимум 6 символов">
-                            <button type="button" class="passwordToggle" data-target="registerPassword">Показать</button>
+                            <input type="password" id="registerPassword" data-i18n-placeholder="placeholderRegPass" placeholder="Минимум 6 символов">
+                            <button type="button" class="passwordToggle" data-target="registerPassword" data-i18n="showPassBtn">Показать</button>
                         </div>
                     </label>
                     <div id="registerMessage" class="message"></div>
-                    <button id="registerButton" class="primaryButton">Зарегистрироваться →</button>
+                    <button id="registerButton" class="primaryButton"><span data-i18n="regBtnText">Зарегистрироваться</span> →</button>
                 </div>
             </div>
         </main>
     </div>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
