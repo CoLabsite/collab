@@ -12,10 +12,15 @@
             <img src="logotip.img" class="brandLogo">
             CoLab </a>
         <nav>
-            <button class="navButton active" data-page="posts">Задачи</button>
-            <button class="navButton" data-page="profile">Профиль</button>
+            <button class="navButton active" data-page="posts" data-i18n="navPosts">Задачи</button>
+            <button class="navButton" data-page="profile" data-i18n="navProfile">Профиль</button>
         </nav>
         <div class="headerUser">
+            <div class="langSwitcher">
+                <button type="button" class="langBtn active" data-lang="ru">RU</button>
+                <span class="langDivider">/</span>
+                <button type="button" class="langBtn" data-lang="en">EN</button>
+            </div>
             <span id="headerNick">Пользователь</span>
             <button id="logoutButton" class="logoutButton" title="Выйти">↗</button>
         </div>
@@ -23,23 +28,24 @@
     <main class="appMain">
         <section id="postsPage" class="page">
             <div class="pageHeading">
-                <h1>Актуальные<br><em>проблемы</em></h1>
-                <button id="newPostButton" class="primaryButton compact">+ Опубликовать задачу</button>
+                <h1><span data-i18n="postsTitle1">Актуальные</span><br><em data-i18n="postsTitle2">проблемы</em></h1>
+               <button id="newPostButton" class="primaryButton compact" data-i18n="newPostButton">+ Опубликовать задачу</button>
             </div>
             <div class="toolbar">
                 <div class="searchBox">
-                    <input type="text" id="searchInput" placeholder="Поиск задач...">
+                    <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Поиск задач...">
                 </div>
                 <div class="filters">
-                    <button class="filter active" data-filter="all">Все</button>
-                    <button class="filter" data-filter="student">Ученики</button>
-                    <button class="filter" data-filter="scientist">Ученые</button>
-                    <button class="filter" data-filter="company">Компании</button>
-                    <button class="filter" data-filter="other">Другое</button>
+                    <button class="filter active" data-filter="all" data-i18n="filterAll">Все</button>
+                    <button class="filter" data-filter="student" data-i18n="filterStudent">Ученики</button>
+                    <button class="filter" data-filter="scientist" data-i18n="filterScientist">Ученые</button>
+                    <button class="filter" data-filter="company" data-i18n="filterCompany">Компании</button>
+                    <button class="filter" data-filter="other" data-i18n="filterOther">Другое</button>
                 </div>
             </div>
             <div id="postsList" class="postsList"></div>
         </section>
+
         <section id="profilePage" class="page hidden">
             <div class="profileHero">
                 <div>
@@ -50,20 +56,20 @@
             <div class="profileStats">
                 <div>
                     <strong id="profileProblems">0</strong>
-                    <span>Опубликовано задач</span>
+                    <span data-i18n="statProblems">Опубликовано задач</span>
                 </div>
                 <div>
                     <strong id="profileSolutions">0</strong>
-                    <span>Предложено решений</span>
+                    <span data-i18n="statSolutions">Предложено решений</span>
                 </div>
             </div>
             <div class="profileColumns">
                 <div>
-                    <h3>Мои проблемы</h3>
+                    <h3 data-i18n="myPostsTitle">Мои проблемы</h3>
                     <div id="myPostsList" class="profileItemsList"></div>
                 </div>
                 <div style="margin-top: 30px;">
-                    <h3>Мои решения</h3>
+                    <h3 data-i18n="mySolutionsTitle">Мои решения</h3>
                     <div id="mySolutionsList" class="profileItemsList"></div>
                 </div>
             </div>
@@ -72,47 +78,45 @@
     <div id="postModal" class="modal hidden">
         <div class="modalCard">
             <button class="closeButton" data-close="postModal">×</button>
-            <h2>Новая задача</h2>
-            <label>Заголовок *
-                <input type="text" id="postTitle" placeholder="Краткое название (обязательно)">
+            <h2 data-i18n="modalNewPostTitle">Новая задача</h2>
+            <label><span data-i18n="labelTitle">Заголовок</span> *
+                <input type="text" id="postTitle" data-i18n-placeholder="placeholderTitle" placeholder="Краткое название (обязательно)">
             </label>
-            <label>Описание *
-                <textarea id="postDescription" rows="4" maxlength="400" placeholder="Подробное описание проблемы... (обязательно)"></textarea>
-                <div class="charCounter"><span id="descCharCount">0</span> / 400 символов</div>
+            <label><span data-i18n="labelDesc">Описание</span> *
+                <textarea id="postDescription" rows="4" maxlength="400" data-i18n-placeholder="placeholderDesc" placeholder="Подробное описание проблемы... (обязательно)"></textarea>
+                <div class="charCounter"><span id="descCharCount">0</span> / <span data-i18n="charLimitText">400 символов</span></div>
             </label>
-            <label>Ссылка на доп. материалы (GitHub, Figma, диск и т.д.)
+            <label><span data-i18n="labelLink">Ссылка на доп. материалы (GitHub, Figma, диск и т.д.)</span>
                 <input type="url" id="postLink" placeholder="https://...">
             </label>
-            <label>Ваша почта / Телеграм (для связи)
+            <label><span data-i18n="labelContact">Ваша почта / Телеграм (для связи)</span>
                 <input type="email" id="postEmail" placeholder="example@mail.com">
             </label>
-            <label>Тег
-                <input type="text" id="postTag" placeholder="экология, IT и т.д.">
+            <label><span data-i18n="labelTag">Тег</span>
+                <input type="text" id="postTag" data-i18n-placeholder="placeholderTag" placeholder="экология, IT и т.д.">
             </label>
             <div id="postMessage" class="message"></div>
-            <button id="savePostButton" class="primaryButton">Опубликовать</button>
+            <button id="savePostButton" class="primaryButton" data-i18n="publishBtn">Опубликовать</button>
         </div>
     </div>
     <div id="solutionModal" class="modal hidden">
         <div class="modalCard">
             <button class="closeButton" data-close="solutionModal">×</button>
-            <h2>Предложить решение</h2>
+            <h2 data-i18n="modalSolutionTitle">Предложить решение</h2>
             <input type="hidden" id="targetPostId">
-            <label>Ваше решение / Комментарий *
-                <textarea id="solutionDescription" rows="4" placeholder="Опишите, как вы предлагаете решить проблему..."></textarea>
+            <label><span data-i18n="labelSolText">Ваше решение / Комментарий</span> *
+                <textarea id="solutionDescription" rows="4" data-i18n-placeholder="placeholderSolText" placeholder="Опишите, как вы предлагаете решить проблему..."></textarea>
             </label>
-            <label>Ссылка на решение (GitHub, репозиторий, документ)
+            <label><span data-i18n="labelSolLink">Ссылка на решение (GitHub, репозиторий, документ)</span>
                 <input type="url" id="solutionLink" placeholder="https://github.com/...">
             </label>
-            <label>Контакт для связи (Email / Telegram / Телефон)
-                <input type="text" id="solutionContact" placeholder="example@mail.com или @telegram">
-            </label>
             <div id="solutionMessage" class="message"></div>
-            <button id="saveSolutionButton" class="primaryButton">Отправить решение</button>
+            <button id="saveSolutionButton" class="primaryButton" data-i18n="sendSolutionBtn">Отправить решение</button>
         </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="main.js"></script>
 </body>
+</html>
 </html>
