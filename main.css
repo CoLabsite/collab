@@ -588,3 +588,37 @@ grid-template-columns: 1fr;
     text-align: right;
     margin-top: 4px;
 }
+/* Стили переключателя языков */
+.langSwitcher {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 15px;
+}
+.langSwitcher.dark .langBtn {
+    color: rgba(255, 255, 255, 0.6);
+}
+.langSwitcher.dark .langBtn.active {
+    color: #ffffff;
+}
+.langSwitcher.dark .langDivider {
+    color: rgba(255, 255, 255, 0.4);
+}
+.langBtn {
+    background: none;
+    color: #676767;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.langBtn.active {
+    color: #202020;
+    background: rgba(41, 126, 143, 0.1);
+    border-radius: 4px;
+}
+.langDivider {
+    color: #cccccc;
+    font-size: 10px;
+}
